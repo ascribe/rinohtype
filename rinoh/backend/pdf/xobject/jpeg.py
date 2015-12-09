@@ -171,7 +171,10 @@ class JPEGReader(XObjectImage):
         self._file.seek(resume_position)
         density = (ifd_0th[EXIF_X_RESOLUTION], ifd_0th[EXIF_Y_RESOLUTION],
                    EXIF_UNITS[ifd_0th[EXIF_RESOLUTION_UNIT]])
-        return density, EXIF_COLOR_SPACES[ifd_exif[EXIF_COLOR_SPACE]]
+        try:
+            return density, EXIF_COLOR_SPACES[ifd_exif[EXIF_COLOR_SPACE]]
+        except KeyError as e:
+            return None
 
     def _parse_exif_ifd(self, endian, tiff_header_offset):
         read_ushort = create_reader('H', endian=endian)
